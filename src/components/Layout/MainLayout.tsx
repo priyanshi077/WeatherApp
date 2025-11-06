@@ -3,7 +3,7 @@
 
 import { ReactNode } from 'react';
 import { Sidebar } from '../Sidebar/Sidebar';
-import { Header } from '../Header/Header';
+
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -17,7 +17,7 @@ export const MainLayout = ({ children, onSearch, userName }: MainLayoutProps) =>
       <Sidebar />
 
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Header onSearch={onSearch} userName={userName} />
+        
 
         <main className="flex-1 overflow-hidden">
           {children}

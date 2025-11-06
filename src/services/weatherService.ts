@@ -1,7 +1,7 @@
 // Logic/Service Layer: Weather service for business logic
 // Transforms and manages weather data, handles state logic
 
-import { WeatherData, CurrentWeather, HourlyForecast, TodayHighlight } from '../types/weather.types';
+import { WeatherData } from '../types/weather.types';
 import { fetchWeatherData } from '../api/weatherApi';
 
 class WeatherService {
@@ -9,16 +9,21 @@ class WeatherService {
   private readonly CACHE_DURATION = 5 * 60 * 1000;
 
   async getWeatherForCity(city: string): Promise<WeatherData> {
-    const cached = this.cache.get(city);
+    try {
+      const cached = this.cache.get(city);
 
-    if (cached && Date.now() - cached.timestamp < this.CACHE_DURATION) {
-      return cached.data;
+      if (cached && Date.now() - cached.timestamp < this.CACHE_DURATION) {
+        return cached.data;
+      }
+
+      const data = await fetchWeatherData(city);
+      this.cache.set(city, { data, timestamp: Date.now() });
+
+      return data;
+    } catch (error) {
+      console.error('Error in weatherService:', error);
+      throw error;
     }
-
-    const data = await fetchWeatherData(city);
-    this.cache.set(city, { data, timestamp: Date.now() });
-
-    return data;
   }
 
   formatTemperature(temp: number, unit: 'C' | 'F' = 'C'): string {

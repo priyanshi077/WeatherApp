@@ -1,60 +1,120 @@
 // Data Layer: API module for weather data
-// Handles all data fetching and API communication (currently mocked)
+// Handles all data fetching and API communication with OpenWeatherMap API
 
 import { WeatherData } from '../types/weather.types';
 
-export const fetchWeatherData = async (city: string = 'India'): Promise<WeatherData> => {
-  await new Promise(resolve => setTimeout(resolve, 500));
+const API_KEY = '1635890035cbba097fd5c26c8ea672a1';
+const BASE_URL = 'https://api.openweathermap.org/data/2.5';
 
-  return {
-    current: {
-      location: city,
-      country: 'India',
-      temperature: 26,
-      condition: 'Cloudy',
-      feelsLike: 26,
-      high: 27,
-      low: 10,
-      date: '24 Dec, 2023',
-      day: 'Monday',
-      icon: 'partly-cloudy'
-    },
-    hourly: [
-      { time: '1PM', temperature: 20, icon: 'partly-cloudy' },
-      { time: '2PM', temperature: 21, icon: 'partly-cloudy' },
-      { time: '3PM', temperature: 20, icon: 'partly-cloudy' },
-      { time: '4PM', temperature: 19, icon: 'partly-cloudy' },
-      { time: '5PM', temperature: 18, icon: 'partly-cloudy' },
-      { time: '6PM', temperature: 18, icon: 'partly-cloudy' },
-      { time: '7PM', temperature: 15, icon: 'partly-cloudy' }
-    ],
-    daily: [
-      { day: 'Tomorrow', temperature: 14, condition: 'Thunder storm', icon: 'thunderstorm' }
-    ],
-    highlights: {
-      chanceOfRain: 42,
-      uvIndex: 3,
-      windSpeed: 12,
-      windDirection: 'NE',
-      humidity: 65
-    },
-    sunriseSunset: {
-      sunrise: '6:45 AM',
-      sunset: '5:30 PM',
-      lengthOfDay: '10h 23m'
-    },
-    otherCities: [
-      { city: 'USA', country: 'USA', temperature: 14, high: 23, low: 10, icon: 'partly-cloudy' },
-      { city: 'Dubai', country: 'UAE', temperature: 27, high: 23, low: 10, icon: 'partly-cloudy' },
-      { city: 'China Nuevo', country: 'China', temperature: 16, high: 23, low: 10, icon: 'partly-cloudy' },
-      { city: 'Canada', country: 'Canada', temperature: 26, high: 23, low: 10, icon: 'partly-cloudy' }
-    ]
+// Get weather icon and condition mapping
+const getWeatherInfo = (code: string): { icon: string; condition: string } => {
+  const mapping: { [key: string]: { icon: string; condition: string } } = {
+    '01d': { icon: 'clear-day', condition: 'Clear Sky' },
+    '01n': { icon: 'clear-night', condition: 'Clear Sky' },
+    '02d': { icon: 'partly-cloudy', condition: 'Partly Cloudy' },
+    '02n': { icon: 'partly-cloudy', condition: 'Partly Cloudy' },
+    '03d': { icon: 'cloudy', condition: 'Cloudy' },
+    '03n': { icon: 'cloudy', condition: 'Cloudy' },
+    '04d': { icon: 'cloudy', condition: 'Overcast' },
+    '04n': { icon: 'cloudy', condition: 'Overcast' },
+    '09d': { icon: 'rain', condition: 'Rain' },
+    '09n': { icon: 'rain', condition: 'Rain' },
+    '10d': { icon: 'rain', condition: 'Rain' },
+    '10n': { icon: 'rain', condition: 'Rain' },
+    '11d': { icon: 'thunderstorm', condition: 'Thunderstorm' },
+    '11n': { icon: 'thunderstorm', condition: 'Thunderstorm' },
+    '13d': { icon: 'snow', condition: 'Snow' },
+    '13n': { icon: 'snow', condition: 'Snow' },
+    '50d': { icon: 'mist', condition: 'Mist' },
+    '50n': { icon: 'mist', condition: 'Mist' }
   };
+  return mapping[code] || { icon: 'partly-cloudy', condition: 'Unknown' };
 };
 
-export const searchCity = async (query: string): Promise<string[]> => {
-  await new Promise(resolve => setTimeout(resolve, 300));
+export const fetchWeatherData = async (city: string = 'London'): Promise<WeatherData> => {
+  try {
+    // Fetch current weather
+    const response = await fetch(
+      `${BASE_URL}/weather?q=${city}&appid=${API_KEY}&units=metric`
+    );
+    
+    if (!response.ok) {
+      throw new Error('City not found');
+    }
 
-  const cities = ['India', 'USA', 'Dubai', 'China', 'Canada', 'London', 'Paris', 'Tokyo'];
-  return cities.filter(city => city.toLowerCase().includes(query.toLowerCase()));
+    const data = await response.json();
+    console.log('Weather API Response:', data); // For debugging
+
+    // Create weather data object
+    const weatherData: WeatherData = {
+      current: {
+        location: data.name,
+        country: data.sys.country,
+        temperature: Math.round(data.main.temp), // Already in Celsius because of units=metric
+        condition: getWeatherInfo(data.weather[0].icon).condition,
+        feelsLike: Math.round(data.main.feels_like),
+        high: Math.round(data.main.temp_max),
+        low: Math.round(data.main.temp_min),
+        date: new Date().toLocaleDateString('en-US', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        }),
+        day: new Date().toLocaleDateString('en-US', { weekday: 'long' }),
+        icon: getWeatherInfo(data.weather[0].icon).icon
+      },
+      hourly: Array(7).fill(null).map((_, i) => ({
+        time: new Date(Date.now() + i * 3600 * 1000).toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          hour12: true
+        }),
+        temperature: Math.round(data.main.temp),
+        icon: getWeatherInfo(data.weather[0].icon).icon
+      })),
+      daily: [{
+        day: 'Tomorrow',
+        temperature: Math.round(data.main.temp),
+        condition: getWeatherInfo(data.weather[0].icon).condition,
+        icon: getWeatherInfo(data.weather[0].icon).icon
+      }],
+      highlights: {
+        chanceOfRain: 30, // Example value as this is not available in current weather
+        uvIndex: 5, // Example value as this is not available in current weather
+        windSpeed: Math.round(data.wind.speed * 3.6), // Convert m/s to km/h
+        windDirection: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][
+          Math.round(((data.wind.deg || 0) % 360) / 45) % 8
+        ],
+        humidity: data.main.humidity
+      },
+      sunriseSunset: {
+        sunrise: new Date(data.sys.sunrise * 1000).toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true
+        }),
+        sunset: new Date(data.sys.sunset * 1000).toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true
+        }),
+        lengthOfDay: (() => {
+          const diff = data.sys.sunset - data.sys.sunrise;
+          const hours = Math.floor(diff / 3600);
+          const minutes = Math.round((diff % 3600) / 60);
+          return `${hours}h ${minutes}m`;
+        })()
+      },
+      otherCities: [
+        { city: 'New York', country: 'US', temperature: 20, high: 22, low: 18, icon: 'partly-cloudy' },
+        { city: 'London', country: 'GB', temperature: 15, high: 17, low: 13, icon: 'cloudy' },
+        { city: 'Tokyo', country: 'JP', temperature: 25, high: 27, low: 23, icon: 'clear-day' },
+        { city: 'Paris', country: 'FR', temperature: 18, high: 20, low: 16, icon: 'partly-cloudy' }
+      ]
+    };
+
+    return weatherData;
+  } catch (error) {
+    console.error('Error fetching weather data:', error);
+    throw error;
+  }
 };

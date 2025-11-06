@@ -2,6 +2,7 @@
 // Contains search functionality and user information
 
 import { Search, ChevronDown } from 'lucide-react';
+import { useState, useCallback } from 'react';
 
 interface HeaderProps {
   onSearch?: (query: string) => void;
@@ -9,14 +10,37 @@ interface HeaderProps {
 }
 
 export const Header = ({ onSearch, userName = 'User Name' }: HeaderProps) => {
+  const [searchValue, setSearchValue] = useState('');
+
+  const handleSearch = useCallback(() => {
+    const trimmedValue = searchValue.trim();
+    if (trimmedValue) {
+      onSearch?.(trimmedValue);
+    }
+  }, [searchValue, onSearch]);
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  };
+
   return (
     <header className="h-20 bg-[#0B1022] border-b-2 border-[#1E2A47] flex items-center justify-between px-8">
       <div className="flex items-center gap-4 flex-1 max-w-xl">
-        <Search className="text-gray-400" size={20} />
+        <button onClick={handleSearch}>
+          <Search className="text-gray-400 hover:text-gray-200 transition-colors" size={20} />
+        </button>
         <input
           type="text"
-          placeholder="Search City..."
-          onChange={(e) => onSearch?.(e.target.value)}
+          placeholder="Enter city name and press Enter..."
+          value={searchValue}
+          onChange={handleInputChange}
+          onKeyPress={handleKeyPress}
           className="bg-transparent text-gray-400 placeholder-gray-600 outline-none text-sm flex-1"
         />
       </div>

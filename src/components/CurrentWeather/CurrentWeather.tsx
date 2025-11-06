@@ -8,12 +8,32 @@ interface CurrentWeatherProps {
   data: CurrentWeatherType;
   temperatureUnit: 'C' | 'F';
   onToggleUnit: () => void;
+  loading?: boolean;
+  error?: string | null;
 }
 
-export const CurrentWeather = ({ data, temperatureUnit, onToggleUnit }: CurrentWeatherProps) => {
+export const CurrentWeather = ({ 
+  data, 
+  temperatureUnit, 
+  onToggleUnit, 
+  loading = false,
+  error = null 
+}: CurrentWeatherProps) => {
   return (
     <div className="relative bg-gradient-to-br from-[#1a2642] to-[#0f1829] rounded-3xl p-6 border-2 border-cyan-400/30 overflow-hidden h-full flex flex-col">
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 via-purple-500 to-cyan-400"></div>
+
+      {loading && (
+        <div className="absolute inset-0 bg-[#0B1022]/80 flex items-center justify-center z-10">
+          <div className="text-white">Loading weather data...</div>
+        </div>
+      )}
+
+      {error && (
+        <div className="absolute inset-0 bg-[#0B1022]/80 flex items-center justify-center z-10">
+          <div className="text-red-500">{error}</div>
+        </div>
+      )}
 
        {/* Location & Unit Switch */}
       <div className="flex items-center justify-between mb-4">
@@ -45,7 +65,10 @@ export const CurrentWeather = ({ data, temperatureUnit, onToggleUnit }: CurrentW
          {/* Main Weather Info */}
       <div className="flex items-center justify-between flex-1">
         <div className="flex-1">
-          <h2 className="text-white text-3xl font-bold mb-1">{data.day}</h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-white text-3xl font-bold mb-1">{data.day}</h2>
+            <span className="text-gray-400 text-sm">({data.location}, {data.country})</span>
+          </div>
           <p className="text-gray-400 text-xs mb-4">{data.date}</p>
 
           <div className="flex items-baseline gap-2 mb-2">
