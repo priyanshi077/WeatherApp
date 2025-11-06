@@ -11,7 +11,7 @@ interface MainLayoutProps {
   userName?: string;
 }
 
-export const MainLayout = ({ children, onSearch, userName }: MainLayoutProps) => {
+export const MainLayout = ({ children, }: MainLayoutProps) => {
   return (
     <div className="flex h-screen bg-[#0B1022] overflow-hidden">
       <Sidebar />
