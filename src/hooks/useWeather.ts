@@ -31,23 +31,27 @@ export const useWeather = (initialCity: string = 'London') => {
   }, [currentCity]);
 
   const changeCity = async (city: string) => {
-    if (city && city.trim()) {
-      try {
-        setLoading(true);
-        setError(null);
-        const data = await weatherService.getWeatherForCity(city.trim());
-        setWeatherData(data);
-        setCurrentCity(city.trim());
-      } catch (err) {
-        setError('City not found. Please try another city name.');
-        console.error('Error changing city:', err);
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
+    
+    setCurrentCity(city.trim())
+  }
 
   const toggleTemperatureUnit = () => {
+    if (!weatherData) return;
+
+    const currentTemp = weatherData.current.temperature;
+
+    const updatedTemp =
+      temperatureUnit === 'C'
+        ? (currentTemp * 9) / 5 + 32 // C → F
+        : ((currentTemp - 32) * 5) / 9; // F → C
+
+    setWeatherData({
+      ...weatherData,
+      current: {
+        ...weatherData.current,
+        temperature: Number(updatedTemp.toFixed(1)),
+      },
+    });
     setTemperatureUnit(prev => prev === 'C' ? 'F' : 'C');
   };
 

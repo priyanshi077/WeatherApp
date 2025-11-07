@@ -18,6 +18,7 @@ class WeatherService {
 
       const data = await fetchWeatherData(city);
       this.cache.set(city, { data, timestamp: Date.now() });
+      
 
       return data;
     } catch (error) {

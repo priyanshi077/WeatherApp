@@ -16,8 +16,9 @@ export const Dashboard = () => {
   const handleSearch = (query: string) => {
     changeCity(query);
   };
+// Global Loading screen
 
-  if (!weatherData) {
+if (loading && !weatherData) {
     return (
       <div className="h-full flex items-center justify-center">
         <div className="text-white text-xl">Loading weather data...</div>
@@ -25,13 +26,25 @@ export const Dashboard = () => {
     );
   }
 
+if (error && !weatherData) {
+    return (
+      <div className="h-full flex items-center justify-center text-red-500 text-xl">
+        {error}
+      </div>
+    );
+  }
+  
+
   return (
     <div className="h-full">
       <Header onSearch={handleSearch} />
+
       <div className="p-6">
         <div className="grid grid-cols-12 gap-6 h-full">
+
           <div className="col-span-7 flex flex-col gap-6">
-            <div className="flex-shrink-0">
+            
+            {weatherData?.current && (
               <CurrentWeather
                 data={weatherData.current}
                 temperatureUnit={temperatureUnit}
@@ -39,32 +52,26 @@ export const Dashboard = () => {
                 loading={loading}
                 error={error}
               />
-            </div>
+            )}
 
-            <div className="flex-shrink-0">
-              <HourlyForecast data={weatherData.hourly} />
-            </div>
+            {weatherData?.hourly && <HourlyForecast data={weatherData.hourly} />}
 
-            <div className="flex-shrink-0">
-              <div className="grid grid-cols-2 gap-6">
-                <DailyForecast data={weatherData.daily} />
-                <SunriseSunset data={weatherData.sunriseSunset} />
-              </div>
+            <div className="grid grid-cols-2 gap-6">
+              {weatherData?.daily && <DailyForecast data={weatherData.daily} />}
+              {weatherData?.sunriseSunset && <SunriseSunset data={weatherData.sunriseSunset} />}
             </div>
           </div>
 
           <div className="col-span-5 flex flex-col gap-6">
-            <div className="flex-shrink-0">
-              <TodayHighlight data={weatherData.highlights} />
-            </div>
+            {weatherData?.highlights && <TodayHighlight data={weatherData.highlights} />}
 
-            <div className="flex-shrink-0 flex-1">
-              <OtherCities
-                data={weatherData.otherCities}
-                onCityClick={changeCity}
-              />
+            <div className="flex-1">
+              {weatherData?.otherCities && (
+                <OtherCities data={weatherData.otherCities} onCityClick={changeCity} />
+              )}
             </div>
           </div>
+
         </div>
       </div>
     </div>
