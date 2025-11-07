@@ -3,10 +3,11 @@
 
 import { WeatherData } from '../types/weather.types';
 
-const API_KEY = '1635890035cbba097fd5c26c8ea672a1';
-const BASE_URL = 'https://api.openweathermap.org/data/2.5';
 
-// Get weather icon and condition mapping
+const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
+const BASE_URL = import.meta.env.VITE_WEATHER_BASE_URL;
+
+
 const getWeatherInfo = (code: string): { icon: string; condition: string } => {
   const mapping: { [key: string]: { icon: string; condition: string } } = {
     '01d': { icon: 'clear-day', condition: 'Clear Sky' },
