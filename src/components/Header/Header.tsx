@@ -30,22 +30,26 @@ export const Header = ({ onSearch, userName = 'User Name' }: HeaderProps) => {
   };
 
   return (
-    <header className="h-20 bg-[#0B1022] border-b-2 border-[#1E2A47] flex items-center justify-between px-8">
-      <div className="flex items-center gap-4 flex-1 max-w-xl">
+    <header className="h-20 bg-[#0B1022]   flex items-center justify-between px-8 ">
+
+      <div className="flex items-center border rounded-full bg-[#151C2F] px-4 py-1 flex-1 max-w-xl  ">
         <button onClick={handleSearch}>
-          <Search className="text-gray-400 hover:text-gray-200 transition-colors" size={20} />
-        </button>
+          <Search className="text-gray-100 transition-colors" size={30} />
+
+        </button >
         <input
           type="text"
-          placeholder="Enter city name and press Enter..."
+          placeholder="Search City"
           value={searchValue}
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
-          className="bg-transparent text-gray-400 placeholder-gray-600 outline-none text-sm flex-1"
+          className="bg-transparent text-white   px-8 py-4 outline-none text-sm flex-1"
         />
       </div>
 
-      <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
+
+
+      <div className="flex items-center gap-10border rounded-full bg-[#1a2239] px-4 py-1 cursor-pointer hover:opacity-80 transition-opacity">
         <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-purple-800 rounded-full flex items-center justify-center">
           <span className="text-white text-sm font-semibold">U</span>
         </div>
