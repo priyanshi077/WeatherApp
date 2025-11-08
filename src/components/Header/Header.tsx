@@ -30,11 +30,11 @@ export const Header = ({ onSearch, userName = 'User Name' }: HeaderProps) => {
   };
 
   return (
-    <header className="h-20 bg-[#0B1022]   flex items-center justify-between px-8 ">
+    <header className="h-20 bg-[#0B1022]  flex items-center justify-between px-8 ">
 
-      <div className="flex items-center border rounded-full bg-[#151C2F] px-4 py-1 flex-1 max-w-xl  ">
+      <div className="flex items-center  rounded-full bg-[#151C2F] px-4 py-1 flex-1 max-w-xl  ">
         <button onClick={handleSearch}>
-          <Search className="text-gray-100 transition-colors" size={30} />
+          <Search className="text-gray-700 transition-colors" size={30} />
 
         </button >
         <input
