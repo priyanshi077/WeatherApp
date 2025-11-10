@@ -11,11 +11,11 @@ interface HourlyForecastProps {
 
 export const HourlyForecast = ({ data }: HourlyForecastProps) => {
   return (
-    <div className="bg-[#0f1829] rounded-3xl p-20 pt-2 ml-10 h-full flex flex-col">
+    <div className=" bg-[#0d1422] rounded-3xl p-20 mt-5 pt-2 h-30 flex flex-col">
 
-      <h3 className="text-white text-sm font-semibold mb-4">Today / Week</h3>
+      <h3 className="text-white text-sm font-semibold mb-4 ml-40">Today / Week</h3>
 
-      <div className="flex gap-2 h-40 w-10">
+      <div className="flex gap-2 h-40 w-10 ml-20">
         {data.map((hour, index) => (
           <div
             key={index}
@@ -25,8 +25,10 @@ export const HourlyForecast = ({ data }: HourlyForecastProps) => {
             <div className='h-1 w-10 flex items-center justify-center '>
               <img src="Cloudy.png" alt="" />
             </div>
-            <span className="text-black text-sm font-semibold ">{hour.temperature}°</span>
+            <span className="text-white text-sm font-semibold ">{hour.temperature}°</span>
           </div>
+
+          
         ))}
       </div>
     </div>
