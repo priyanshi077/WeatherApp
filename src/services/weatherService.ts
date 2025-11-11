@@ -67,15 +67,7 @@ class WeatherService {
         icon: this.getWeatherInfo(raw.weather[0].icon).icon,
       })),
 
-      daily: [
-        {
-          day: 'Tomorrow',
-          temperature: Math.round(raw.main.temp),
-          condition: this.getWeatherInfo(raw.weather[0].icon).condition,
-          icon: this.getWeatherInfo(raw.weather[0].icon).icon,
-        },
-      ],
-
+      
       highlights: {
         chanceOfRain: 30,
         uvIndex: 5,
