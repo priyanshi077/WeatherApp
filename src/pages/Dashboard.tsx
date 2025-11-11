@@ -6,19 +6,26 @@ import { CurrentWeather } from '../components/CurrentWeather/CurrentWeather';
 import { HourlyForecast } from '../components/HourlyForecast/HourlyForecast';
 import { DailyForecast } from '../components/DailyForecast/DailyForecast';
 import { TodayHighlight } from '../components/TodayHighlight/TodayHighlight';
-import { SunriseSunset } from '../components/SunriseSunset/SunriseSunset';
+
 import { OtherCities } from '../components/OtherCities/OtherCities';
 import { useWeather } from '../hooks/useWeather';
 
 export const Dashboard = () => {
-  const { weatherData, loading, error, temperatureUnit, toggleTemperatureUnit, changeCity } = useWeather();
+  const
+    { weatherData,
+      loading,
+      error,
+      temperatureUnit,
+      toggleTemperatureUnit,
+      changeCity,
+    } = useWeather();
 
   const handleSearch = (query: string) => {
     changeCity(query);
   };
-// Global Loading screen
+  // Global Loading screen
 
-if (loading && !weatherData) {
+  if (loading && !weatherData) {
     return (
       <div className="h-full flex items-center justify-center">
         <div className="text-white text-xl">Loading weather data...</div>
@@ -26,14 +33,14 @@ if (loading && !weatherData) {
     );
   }
 
-if (error && !weatherData) {
+  if (error && !weatherData) {
     return (
       <div className="h-full flex items-center justify-center text-red-500 text-xl">
         {error}
       </div>
     );
   }
-  
+
 
   return (
     <div className="h-full">
@@ -43,7 +50,7 @@ if (error && !weatherData) {
         <div className="grid grid-cols-12 gap-6 h-full">
 
           <div className="col-span-7 flex flex-col gap-6">
-            
+
             {weatherData?.current && (
               <CurrentWeather
                 data={weatherData.current}
@@ -58,7 +65,7 @@ if (error && !weatherData) {
 
             <div className="grid grid-cols-2 gap-6">
               {weatherData?.daily && <DailyForecast data={weatherData.daily} />}
-              {weatherData?.sunriseSunset && <SunriseSunset data={weatherData.sunriseSunset} />}
+              
             </div>
           </div>
 
