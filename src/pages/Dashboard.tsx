@@ -43,7 +43,7 @@ export const Dashboard = () => {
 
 
   return (
-    <div className="h-full">
+    <div className="h-full bg-white dark:bg-[#0B1022]">
       <Header onSearch={handleSearch} />
 
       <div className="p-6">

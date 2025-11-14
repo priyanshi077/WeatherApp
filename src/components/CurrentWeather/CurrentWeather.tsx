@@ -20,33 +20,33 @@ export const CurrentWeather = ({
   error = null 
 }: CurrentWeatherProps) => {
   return (
-    <div className="relative bg-gradient-to-br from-[#1a2642] to-[#0f1829] rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-2 border-cyan-400/30 overflow-hidden h-full flex flex-col">
+    <div className="relative bg-gradient-to-br from-white to-gray-50 dark:from-[#1a2642] dark:to-[#0f1829] rounded-2xl sm:rounded-3xl p-4 sm:p-6 border-2 border-gray-200 dark:border-cyan-500/20 overflow-hidden h-full flex flex-col">
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 via-purple-500 to-cyan-400"></div>
 
       {loading && (
-        <div className="absolute inset-0 bg-[#0B1022]/80 flex items-center justify-center z-10">
-          <div className="text-white text-sm sm:text-base">Loading weather data...</div>
+        <div className="absolute inset-0 bg-white/80 dark:bg-[#0B1022]/80 flex items-center justify-center z-10">
+          <div className="text-black dark:text-white text-sm sm:text-base">Loading weather data...</div>
         </div>
       )}
 
       {error && (
-        <div className="absolute inset-0 bg-[#0B1022]/80 flex items-center justify-center z-10">
+        <div className="absolute inset-0 bg-white/80 dark:bg-[#0B1022]/80 flex items-center justify-center z-10">
           <div className="text-red-500">{error}</div>
         </div>
       )}
 
        {/* Location & Unit Switch */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mb-4">
-        <div className="flex items-center gap-2 bg-purple-600 px-2 sm:px-3 py-1 rounded-full">
-          <MapPin className="text-white" size={12} />
-          <span className="text-white text-[10px] sm:text-xs font-medium">{data.location}</span>
+          <div className="flex items-center gap-2 bg-purple-600 dark:bg-purple-700 px-2 sm:px-3 py-1 rounded-full">
+            <MapPin className="text-white" size={12} />
+            <span className="text-white text-[10px] sm:text-xs font-medium">{data.location}</span>
         </div>
 
-        <div className="flex items-center gap-1 bg-[#1E2A47] rounded-full p-1">
+        <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 rounded-full p-1">
           <button
             onClick={onToggleUnit}
             className={`px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium transition-colors ${
-              temperatureUnit === 'F' ? 'bg-white text-black' : 'text-gray-400'
+              temperatureUnit === 'F' ? 'bg-white text-black' : 'text-gray-500 dark:text-gray-500'
             }`}
           >
             F
@@ -54,10 +54,11 @@ export const CurrentWeather = ({
           <button
             onClick={onToggleUnit}
             className={`px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium transition-colors ${
-              temperatureUnit === 'C' ? 'bg-white text-black' : 'text-gray-400'
+              temperatureUnit === 'C' ? 'bg-white text-black' : 'text-gray-500 dark:text-gray-500'
             }`}
+           
           >
-            C
+           C
           </button>
         </div>
       </div>
@@ -66,17 +67,17 @@ export const CurrentWeather = ({
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between flex-1 gap-4 sm:gap-0">
         <div className="flex-1">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2">
-            <h2 className="text-white text-2xl sm:text-3xl font-bold">{data.day}</h2>
-            <span className="text-gray-400 text-xs sm:text-sm">({data.location}, {data.country})</span>
+            <h2 className="text-black dark:text-gray-100 text-2xl sm:text-3xl font-bold">{data.day}</h2>
+            <span className="text-gray-600 dark:text-gray-500 text-xs sm:text-sm">({data.location}, {data.country})</span>
           </div>
-          <p className="text-gray-400 text-[10px] sm:text-xs mb-3 sm:mb-4">{data.date}</p>
+          <p className="text-gray-600 dark:text-gray-500 text-[10px] sm:text-xs mb-3 sm:mb-4">{data.date}</p>
 
           <div className="flex items-baseline gap-2 mb-2">
-            <span className="text-white text-4xl sm:text-5xl font-bold">{data.temperature}°{temperatureUnit}</span>
-            <Cloud className="text-gray-400" size={28} />
+            <span className="text-black dark:text-gray-100 text-4xl sm:text-5xl font-bold">{data.temperature}°{temperatureUnit}</span>
+            <Cloud className="text-gray-500 dark:text-gray-500" size={28} />
           </div>
 
-          <p className="text-gray-400 text-[10px] sm:text-xs">
+          <p className="text-gray-600 dark:text-gray-500 text-[10px] sm:text-xs">
             High: {data.high}° Low: {data.low}°
           </p>
         </div>
@@ -94,12 +95,12 @@ export const CurrentWeather = ({
         </div>
       </div>
 
-      <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-[#1E2A47] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+      <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
         <div className="flex items-center gap-2">
-          <CloudRain className="text-gray-400" size={14} />
-          <span className="text-white text-xs sm:text-sm font-semibold">{data.condition}</span>
+          <CloudRain className="text-gray-500 dark:text-gray-500" size={14} />
+          <span className="text-black dark:text-gray-100 text-xs sm:text-sm font-semibold">{data.condition}</span>
         </div>
-        <span className="text-gray-400 text-[10px] sm:text-xs">Feels Like {data.feelsLike}°</span>
+        <span className="text-gray-600 dark:text-gray-500 text-[10px] sm:text-xs">Feels Like {data.feelsLike}°</span>
       </div>
     </div>
   );

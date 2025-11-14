@@ -12,10 +12,10 @@ interface MainLayoutProps {
 
 export const MainLayout = ({ children }: MainLayoutProps) => {
   return (
-    <div className="flex h-screen bg-[#0B1022]">
+     <div className="flex h-screen bg-white dark:bg-[#0B1022]">
       <Sidebar />{" "}
       <div className="flex-1 flex flex-col">
-        <main className="flex-1 overflow-y-auto hide-scrollbar">{children}</main>
+        <main className="flex-1 overflow-y-auto hide-scrollbar bg-white dark:bg-gray-900">{children}</main>
 
       </div>
     </div>
